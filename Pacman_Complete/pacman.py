@@ -6,7 +6,7 @@ from entity import Entity
 from sprites import PacmanSprites
 
 class Pacman(Entity):
-    def __init__(self, node):
+    def __init__(self, node, pathfinding):
         Entity.__init__(self, node )
         self.name = PACMAN    
         self.color = YELLOW
@@ -14,6 +14,7 @@ class Pacman(Entity):
         self.setBetweenNodes(LEFT)
         self.alive = True
         self.sprites = PacmanSprites(self)
+        self.pathfinding = pathfinding
 
     def reset(self):
         Entity.reset(self)
@@ -27,7 +28,8 @@ class Pacman(Entity):
         self.alive = False
         self.direction = STOP
 
-    def update(self, dt):	
+    def update(self, dt):
+        self.pathfinding.dijkstra(self.position, Vector2(96,64))
         self.sprites.update(dt)
         self.position += self.directions[self.direction]*self.speed*dt
         direction = self.getValidKey()

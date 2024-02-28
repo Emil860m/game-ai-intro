@@ -11,6 +11,8 @@ class Node(object):
                        DOWN:[PACMAN, BLINKY, PINKY, INKY, CLYDE, FRUIT], 
                        LEFT:[PACMAN, BLINKY, PINKY, INKY, CLYDE, FRUIT], 
                        RIGHT:[PACMAN, BLINKY, PINKY, INKY, CLYDE, FRUIT]}
+        self.priority = 100000
+        self.previous = None
 
     def denyAccess(self, direction, entity):
         if entity.name in self.access[direction]:
@@ -27,6 +29,15 @@ class Node(object):
                 line_end = self.neighbors[n].position.asTuple()
                 pygame.draw.line(screen, WHITE, line_start, line_end, 4)
                 pygame.draw.circle(screen, RED, self.position.asInt(), 12)
+
+    def __eq__(self, other) -> bool:
+        return self.position == other.position
+    
+    def __lt__(self, other):
+        return self.priority < other.priority
+    
+    def __str__(self) -> str:
+        return str(self.position.x) + ", " + str(self.position.y)
 
 
 class NodeGroup(object):
